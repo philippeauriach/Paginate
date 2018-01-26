@@ -4,6 +4,8 @@ import android.database.DataSetObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.HeaderViewListAdapter;
 
 import com.paginate.Paginate;
@@ -43,7 +45,11 @@ public final class AbsListViewPaginate extends Paginate implements EndScrollList
             // Wrap existing adapter with new adapter that will add loading row
             wrapperAdapter = new WrapperAdapter(adapter, loadingListItemCreator);
             adapter.registerDataSetObserver(dataSetObserver);
-            ((AdapterView) absListView).setAdapter(wrapperAdapter);
+            if (absListView instanceof ExpandableListView && adapter instanceof ExpandableListAdapter) {
+                ((ExpandableListView) absListView).setAdapter((ExpandableListAdapter) adapter);
+            } else {
+                ((AdapterView) absListView).setAdapter(wrapperAdapter);
+            }
         }
     }
 
